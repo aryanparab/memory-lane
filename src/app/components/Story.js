@@ -890,6 +890,8 @@ const ScrapbookPage = ({ slide, pageNumber, isLeft = true, title, theme }) => {
 };
 
 // Main scrapbook component
+
+// Main scrapbook component
 export default function Story({
   journey,
   theme = themes.romantic,

@@ -903,12 +903,11 @@ export default function Story({
 }) {
   const [isFlipping, setIsFlipping] = useState(false);
   const [isBookOpen, setIsBookOpen] = useState(false);
-  
-  // Calculate total pages: cover + content pages + end cover
+
   const totalSlides = journey.slides.length;
   const contentPages = Math.ceil(totalSlides / 2);
-  const totalPages = contentPages + 2; // +1 for start cover, +1 for end cover
-  
+  const totalPages = contentPages + 2;
+
   const title = Array.isArray(journey.title) ? journey.title[0] : journey.title;
   const colors = getThemeColors(theme);
 
@@ -922,55 +921,44 @@ export default function Story({
 
   const handlePageTurn = (direction) => {
     if (isFlipping) return;
-    
     setIsFlipping(true);
     setTimeout(() => {
       if (direction === 'next' && page < totalPages - 1) {
         const newPage = page + 1;
         setPage(newPage);
-        
-        // Open book when moving from cover page
-        if (page === 0) {
-          setIsBookOpen(true);
-        }
-        // Close book when reaching the end
-        if (newPage === totalPages - 1) {
-          setIsBookOpen(false);
-        }
+        if (page === 0) setIsBookOpen(true);
+        if (newPage === totalPages - 1) setIsBookOpen(false);
       } else if (direction === 'prev' && page > 0) {
         const newPage = page - 1;
         setPage(newPage);
-        
-        // Close book when going back to cover
-        if (newPage === 0) {
-          setIsBookOpen(false);
-        } else {
-          setIsBookOpen(true);
-        }
+        if (newPage === 0) setIsBookOpen(false);
+        else setIsBookOpen(true);
       }
       setIsFlipping(false);
     }, 300);
   };
 
   const renderCurrentPage = () => {
-    // First page - book cover
-    if (page === 0) {
-      return <BookCover title={title} theme={theme} />;
-    }
-    
-    // Last page - book end cover
-    if (page === totalPages - 1) {
-      return <BookCover title={title} theme={theme} isClosing={true} />;
-    }
-    
-    // Content pages
-    const contentPageIndex = page - 1; // Subtract 1 for the cover page
+    if (page === 0 || page === totalPages - 1) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="w-full max-w-2xl aspect-[3/4]">
+          <BookCover
+            title={title}
+            theme={theme}
+            isClosing={page === totalPages - 1}
+          />
+        </div>
+      </div>
+    );
+  }
+
+    const contentPageIndex = page - 1;
     const leftSlideIndex = contentPageIndex * 2;
     const rightSlideIndex = leftSlideIndex + 1;
-    
+
     return (
       <div className="flex h-full">
-        {/* Left page */}
         <div className="w-1/2 border-r-2" style={{ borderColor: colors.border + '4d' }}>
           {journey.slides[leftSlideIndex] ? (
             <ScrapbookPage 
@@ -980,24 +968,8 @@ export default function Story({
               title={title}
               theme={theme}
             />
-          ) : (
-            <div 
-              className="w-full h-full flex items-center justify-center"
-              style={{
-                background: `linear-gradient(135deg, ${colors.pageBackground} 0%, ${colors.secondary} 100%)`
-              }}
-            >
-              <div className="text-center opacity-40">
-                <div className="text-8xl mb-6">📖</div>
-                <p className="font-serif italic text-xl" style={{ color: colors.text }}>
-                  Our Journey Continues...
-                </p>
-              </div>
-            </div>
-          )}
+          ) : null}
         </div>
-        
-        {/* Right page */}
         <div className="w-1/2">
           {journey.slides[rightSlideIndex] ? (
             <ScrapbookPage 
@@ -1007,21 +979,7 @@ export default function Story({
               title={title}
               theme={theme}
             />
-          ) : (
-            <div 
-              className="w-full h-full flex items-center justify-center"
-              style={{
-                background: `linear-gradient(135deg, ${colors.pageBackground} 0%, ${colors.secondary} 100%)`
-              }}
-            >
-              <div className="text-center opacity-40">
-                <div className="text-8xl mb-6">📖</div>
-                <p className="font-serif italic text-xl" style={{ color: colors.text }}>
-                 {title}
-                </p>
-              </div>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     );
@@ -1029,30 +987,18 @@ export default function Story({
 
   return (
     <div 
-      className="h-screen w-screen relative overflow-hidden"
+      className="min-h-screen w-full relative overflow-hidden"
       style={{
-        background: `
-          linear-gradient(135deg, 
-            ${colors.primary} 0%, 
-            ${colors.secondary} 25%,
-            ${colors.tertiary} 50%,
-            ${colors.quaternary} 75%,
-            ${colors.accent} 100%
-          ),
-          radial-gradient(circle at 30% 70%, ${colors.shadow.replace('0.3', '0.05')} 0%, transparent 50%),
-          radial-gradient(circle at 70% 30%, ${colors.shadow.replace('0.3', '0.03')} 0%, transparent 50%)
-        `
+        background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}, ${colors.accent})`
       }}
     >
-      {/* Floating animations with theme emojis */}
       <ThemeAnimation theme={theme} />
-      
-      {/* Music control with theme colors */}
+
       <button
         onClick={toggleMute}
-        className="fixed top-8 right-8 z-50 text-3xl p-5 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 border-3"
+        className="fixed top-8 right-8 z-50 text-3xl p-5 rounded-full shadow-2xl hover:scale-110 border-3"
         style={{
-          background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.pageBackground} 100%)`,
+          background: `linear-gradient(135deg, ${colors.accent}, ${colors.pageBackground})`,
           borderColor: colors.border + '66',
           backdropFilter: 'blur(12px)'
         }}
@@ -1061,62 +1007,22 @@ export default function Story({
         {musicMuted ? '🔇' : '🎶'}
       </button>
 
-      {/* Hidden audio element */}
       <audio ref={audioRef} loop preload="auto">
         <source src="/music/romantic.mp3" type="audio/mpeg" />
       </audio>
 
-      {/* Fullscreen Scrapbook */}
-      <div className="h-full w-full flex items-center justify-center p-8">
-        <div className="relative w-full h-full max-w-7xl mx-auto">
-          
-          {/* Book binding - only show when book is open */}
+      <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 md:px-8">
+        <div className="relative w-full max-w-[1400px] aspect-[16/10] mx-auto">
           {isBookOpen && (
-            <div 
-              className="absolute left-1/2 top-0 bottom-0 w-12 transform -translate-x-1/2 shadow-2xl z-30"
-              style={{ background: colors.bindingGradient }}
-            >
-              {/* Enhanced binding rings with theme colors */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-12 transform -translate-x-1/2 z-30" style={{ background: colors.bindingGradient }}>
               {[...Array(7)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="absolute w-3 h-3 rounded-full left-1/2 transform -translate-x-1/2 shadow-inner border"
-                  style={{ 
-                    top: `${15 + i * 12}%`,
-                    backgroundColor: colors.text,
-                    borderColor: colors.textSecondary
-                  }}
-                />
+                <div key={i} className="absolute w-3 h-3 rounded-full left-1/2 transform -translate-x-1/2 border"
+                  style={{ top: `${15 + i * 12}%`, backgroundColor: colors.text, borderColor: colors.textSecondary }} />
               ))}
             </div>
           )}
 
-          {/* Book pages with theme colors */}
-          <div 
-            className="relative overflow-hidden h-full"
-            style={{ 
-              aspectRatio: isBookOpen ? '16/10' : '8/10',
-              background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.pageBackground} 100%)`,
-              boxShadow: `
-                0 25px 50px ${colors.shadow},
-                0 15px 30px ${colors.shadow.replace('0.3', '0.2')},
-                inset 0 1px 0 rgba(255, 255, 255, 0.9)
-              `,
-              border: '3px solid',
-              borderImage: `linear-gradient(135deg, ${colors.border}, ${colors.textSecondary}, ${colors.border}) 1`,
-              borderRadius: '12px',
-              transition: 'aspect-ratio 0.6s ease-in-out'
-            }}
-          >
-            {/* Enhanced page shadows - only show when book is open */}
-            {isBookOpen && (
-              <>
-                <div className="absolute left-0 top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-black/3 to-black/8 pointer-events-none z-20" />
-                <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-transparent via-black/3 to-black/8 pointer-events-none z-20" />
-              </>
-            )}
-            
-            {/* Page flip animation container */}
+          <div className="relative overflow-hidden w-full h-full">
             <AnimatePresence mode="wait">
               <motion.div 
                 key={page}
@@ -1131,85 +1037,26 @@ export default function Story({
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Enhanced page curl effect with theme colors - only show when book is open */}
-          {isBookOpen && (
-            <div 
-              className="absolute bottom-0 right-0 w-20 h-20 transform rotate-45 translate-x-10 translate-y-10 opacity-70"
-              style={{
-                background: `linear-gradient(to top left, ${colors.tertiary} 0%, ${colors.accent} 100%)`,
-                boxShadow: `-4px -4px 12px ${colors.shadow.replace('0.3', '0.2')}`
-              }}
-            />
-          )}
         </div>
       </div>
 
-      {/* Navigation buttons with theme colors */}
       {page > 0 && (
         <button
           onClick={() => handlePageTurn('prev')}
           disabled={isFlipping}
-          className="fixed left-8 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 border-3 disabled:opacity-50"
-          style={{
-            background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.pageBackground} 100%)`,
-            borderColor: colors.border + '66',
-            backdropFilter: 'blur(12px)',
-            color: colors.text
-          }}
-        >
-          ←
-        </button>
+          className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full"
+          style={{ background: colors.accent }}
+        >←</button>
       )}
 
       {page < totalPages - 1 && (
         <button
           onClick={() => handlePageTurn('next')}
           disabled={isFlipping}
-          className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 border-3 disabled:opacity-50"
-          style={{
-            background: `linear-gradient(135deg, ${colors.accent} 0%, ${colors.pageBackground} 100%)`,
-            borderColor: colors.border + '66',
-            backdropFilter: 'blur(12px)',
-            color: colors.text
-          }}
-        >
-          →
-        </button>
+          className="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full"
+          style={{ background: colors.accent }}
+        >→</button>
       )}
-
-      {/* Page indicator at bottom with theme colors */}
-      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 flex space-x-3">
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            onClick={() => !isFlipping && setPage(i)}
-            disabled={isFlipping}
-            className={`w-4 h-4 rounded-full transition-all duration-300 ${
-              i === page 
-                ? 'scale-125 shadow-lg' 
-                : 'hover:scale-110'
-            }`}
-            style={{
-              background: i === page 
-                ? `linear-gradient(135deg, ${colors.border} 0%, ${colors.textSecondary} 100%)`
-                : colors.accent + 'b3',
-              border: `2px solid ${colors.border}80`
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Enhanced decorative elements with theme emojis */}
-      <div className="fixed bottom-8 left-8 opacity-25">
-        <div className="text-7xl">{theme.emojis[0] || '💕'}</div>
-      </div>
-      <div className="fixed top-24 left-12 opacity-25">
-        <div className="text-5xl">{theme.emojis[theme.emojis.length - 1] || '✨'}</div>
-      </div>
-      <div className="fixed bottom-24 right-16 opacity-25">
-        <div className="text-6xl">{theme.emojis[Math.floor(theme.emojis.length / 2)] || '🌹'}</div>
-      </div>
     </div>
   );
 }

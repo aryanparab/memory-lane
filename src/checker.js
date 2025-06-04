@@ -1,4 +1,4 @@
-import { enhanceDescription } from './enhancer.js';
+import { enhanceDescription } from './app/api/journeys/enhancer.js';
 
 (async () => {
   const enhanced = await enhanceDescription("Diwali celebration.", "romantic");

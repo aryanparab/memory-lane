@@ -1,0 +1,43 @@
+
+.flip-container {
+  perspective: 2000px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.flip-book {
+  transform-style: preserve-3d;
+  transition: transform 1s ease-in-out;
+}
+
+.flip-page {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.page-enter {
+  transform: rotateY(180deg);
+}
+
+.page-enter-active {
+  transform: rotateY(0deg);
+}
+
+.page-exit {
+  transform: rotateY(0deg);
+}
+
+.page-exit-active {
+  transform: rotateY(-180deg);
+}
+
+.story-progress-bar {
+  height: 5px;
+  background: linear-gradient(to right, #f7b733, #fc4a1a);
+  transition: width 0.1s ease-in;
+}

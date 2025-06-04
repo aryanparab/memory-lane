@@ -2,7 +2,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from 'next/server';
-import { enhanceDescription } from '../enhancer';
+import {enhanceDescription} from "../enhancer"
 
 
 // MAIN API HANDLER
@@ -40,7 +40,7 @@ export async function POST(req) {
     console.log(`📷 Found ${imageFiles.length} image files`);
 
     const slides = [];
-
+    let context = "";
     for (let i = 0; i < imageFiles.length; i++) {
       console.log(`\n🔄 Processing slide ${i}...`);
       
@@ -65,7 +65,7 @@ export async function POST(req) {
       // Get description for this slide
       const descFieldName = `desc_${i}`;
       const rawDesc = formData.get(descFieldName) || '';
-      
+      context = context + rawDesc+" "
       console.log(`📝 Raw description for slide ${i}:`, { 
         fieldName: descFieldName, 
         rawDesc, 
@@ -80,7 +80,8 @@ export async function POST(req) {
         console.log(`🧠 Starting enhancement for slide ${i}...`);
         try {
           const beforeEnhancement = rawDesc;
-          enhancedDescription = await enhanceDescription(rawDesc, theme);
+          
+          enhancedDescription = await enhanceDescription(rawDesc, theme,context);
           console.log(`🎯 Enhancement result for slide ${i}:`, {
             before: beforeEnhancement,
             after: enhancedDescription,

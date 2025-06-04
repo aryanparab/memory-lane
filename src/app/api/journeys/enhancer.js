@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const genAI = new GoogleGenerativeAI("AIzaSyCRP-hz05KMM5hFwZq_NAo-4JfKMHr8Hok");
 
 // ENHANCER FUNCTION
-export async function enhanceDescription(text, theme) {
+export async function enhanceDescription(text, theme,context) {
   console.log("🔍 enhanceDescription called with:", { text, theme, textType: typeof text });
   
   if (!text || text.trim() === '') {
@@ -12,7 +12,8 @@ export async function enhanceDescription(text, theme) {
   }
 
   const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-  const prompt = `Improve this description in a ${theme} style: "${text}". Provide only one enhanced version.`;
+  const prompt = `
+  Improve this description in an emotional, nostalgic and ${theme} style: "${text}". Provide only one enhanced version under 30 words.`;
   
   console.log("🤖 Sending prompt to Gemini:", prompt);
 

@@ -40,7 +40,7 @@ export async function POST(req) {
     console.log(`📷 Found ${imageFiles.length} image files`);
 
     const slides = [];
-
+    let context = "";
     for (let i = 0; i < imageFiles.length; i++) {
       console.log(`\n🔄 Processing slide ${i}...`);
       
@@ -80,7 +80,8 @@ export async function POST(req) {
         console.log(`🧠 Starting enhancement for slide ${i}...`);
         try {
           const beforeEnhancement = rawDesc;
-          enhancedDescription = await enhanceDescription(rawDesc, theme);
+          
+          enhancedDescription = await enhanceDescription(rawDesc, theme,context);
           console.log(`🎯 Enhancement result for slide ${i}:`, {
             before: beforeEnhancement,
             after: enhancedDescription,
@@ -98,6 +99,7 @@ export async function POST(req) {
         images: [{ filename: newFilename }],
         description: enhancedDescription,
       };
+      context = context + enhanceDescription + " ";
 
       console.log(`📋 Slide ${i} data:`, slideData);
       slides.push(slideData);

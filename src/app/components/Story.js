@@ -778,6 +778,16 @@ export default function Story({
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 md:px-8" {...swipeHandlers}>
+        <ThemeAnimation theme={theme} />
+      <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 md:px-8" {...swipeHandlers}>
+  <div
+    className="relative w-full max-w-[1400px] md:aspect-[16/10] h-[90vh] md:h-auto mx-auto rounded-xl shadow-2xl border-4"
+    style={{
+      borderColor: colors.border,
+      boxShadow: `0 25px 50px ${colors.shadow}`,
+      background: `linear-gradient(135deg, ${colors.pageBackground}, ${colors.tertiary}30)`
+    }}
+  >
       <div className="relative w-full max-w-[1400px] md:aspect-[16/10] h-[90vh] md:h-auto mx-auto">
         {isBookOpen && (
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-12 transform -translate-x-1/2 z-30" style={{ background: colors.bindingGradient }}>
@@ -800,6 +810,8 @@ export default function Story({
             {renderCurrentPage()}
           </motion.div>
         </AnimatePresence>
+      </div>
+      </div>
       </div>
 
       <button

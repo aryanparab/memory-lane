@@ -1,281 +1,36 @@
-// 'use client'
-// import { motion } from 'framer-motion';
-// import React, { useState, useRef, useEffect } from 'react';
-// import themes from './themes';
-
-
-// // Floating animation component
-// const ThemeAnimation = ({ theme }) => {
-//   return (
-//     <>
-//       {[...Array(17)].map((_, i) => (
-//         <motion.div
-//           key={i}
-//           initial={{ y: '100vh', opacity: 0 }}
-//           animate={{ y: '-10vh', opacity: theme.animation?.opacity ?? 1 }}
-//           transition={{
-//             duration: theme.animation?.speed ?? 6,
-//             repeat: Infinity,
-//             delay: Math.random() * 5,
-//           }}
-//           className="absolute text-3xl select-none pointer-events-none"
-//           style={{ left: `${Math.random() * 100}%` }}
-//         >
-//           {theme.emojis[Math.floor(Math.random() * theme.emojis.length)]}
-//         </motion.div>
-//       ))}
-//     </>
-//   );
-// };
-
-// // Photo frame component with vintage styling
-// const PhotoFrame = ({ src, alt, index }) => {
-//   const [imageLoaded, setImageLoaded] = useState(false);
-//   const [imageError, setImageError] = useState(false);
-
-//   return (
-//     <div 
-//       className="relative group"
-//       style={{
-//         animationDelay: `${index * 0.3}s`
-//       }}
-//     >
-//       {/* Vintage photo frame */}
-//       <div className="relative p-4 bg-white shadow-2xl transform hover:scale-105 transition-all duration-500 hover:shadow-3xl border-8 border-white" 
-//            style={{
-//              background: 'linear-gradient(145deg, #fefefe, #f0f0f0)',
-//              boxShadow: '20px 20px 60px #d9d9d9, -20px -20px 60px #ffffff, inset 5px 5px 10px rgba(0,0,0,0.1)'
-//            }}>
-        
-//         {/* Photo container */}
-//         <div className="relative w-80 h-80 overflow-hidden bg-gray-100">
-//           {!imageError ? (
-//             <>
-//               {!imageLoaded && (
-//                 <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse">
-//                   <div className="text-gray-400 text-lg">📸</div>
-//                 </div>
-//               )}
-//               <img
-//                 src={src}
-//                 alt={alt}
-//                 className={`w-full h-full object-cover transition-opacity duration-500 ${
-//                   imageLoaded ? 'opacity-100' : 'opacity-0'
-//                 } sepia-[0.2] contrast-110 brightness-95`}
-//                 onLoad={() => setImageLoaded(true)}
-//                 onError={() => setImageError(true)}
-//                 loading="lazy"
-//               />
-//             </>
-//           ) : (
-//             <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500">
-//               <div className="text-6xl mb-4">📷</div>
-//               <div className="text-sm font-serif">Memory Loading...</div>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Vintage corner decorations */}
-//         <div className="absolute top-1 left-1 w-6 h-6 border-l-2 border-t-2 border-amber-300 opacity-60"></div>
-//         <div className="absolute top-1 right-1 w-6 h-6 border-r-2 border-t-2 border-amber-300 opacity-60"></div>
-//         <div className="absolute bottom-1 left-1 w-6 h-6 border-l-2 border-b-2 border-amber-300 opacity-60"></div>
-//         <div className="absolute bottom-1 right-1 w-6 h-6 border-r-2 border-b-2 border-amber-300 opacity-60"></div>
-//       </div>
-
-//       {/* Subtle shadow underneath */}
-//       <div className="absolute -bottom-2 left-2 right-2 h-4 bg-black opacity-10 blur-lg rounded-full transform group-hover:scale-110 transition-transform duration-500"></div>
-//     </div>
-//   );
-// };
-
-// // Enhanced description card
-// const DescriptionCard = ({ description, theme }) => {
-//   if (!description || description.length === 0) return null;
-  
-//   const text = Array.isArray(description) ? description[0] : description;
-  
-//   return (
-//     <div className="mt-8 max-w-2xl mx-auto">
-//       <div className={`relative p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border-2 border-${theme.accent}-200`}>
-//         {/* Decorative elements */}
-//         <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-//           <div className="w-6 h-6 bg-white rounded-full border-2 border-amber-300 flex items-center justify-center">
-//             <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
-//           </div>
-//         </div>
-        
-//         {/* Quote marks */}
-//         <div className="absolute top-2 left-4 text-4xl text-amber-300 opacity-50 font-serif">"</div>
-//         <div className="absolute bottom-2 right-4 text-4xl text-amber-300 opacity-50 font-serif">"</div>
-        
-//         <p className={`${theme.textColor} text-lg font-serif italic text-center leading-relaxed px-6 py-2`}>
-//           {text}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// // Main component
-// export default function Story( {
-//   // Mock data based on your JSON structure
-//   journey,
-//   theme,
-//   page,
-//   setPage,
-//   musicMuted,
-//   toggleMute,
-//   audioRef,
-//   selectedMusic,
-//   storyMode = false,
-// }){
-//  const slidesPerPage = 1;
-//   const totalPages = Math.ceil(journey.slides.length / slidesPerPage);
-//   const currentSlides = journey.slides.slice(page * slidesPerPage, (page + 1) * slidesPerPage);
-  
-//   const title = Array.isArray(journey.title) ? journey.title[0] : journey.title;
-
-
-//   // Auto-play functionality
-//   useEffect(() => {
-//     if (audioRef.current) {
-//       const audio = audioRef.current;
-//       audio.volume = 0.3;
-//       audio.muted = musicMuted;
-//     }
-//   }, [musicMuted]);
-//   <audio ref={audioRef} src={`/music/${selectedMusic}.mp3`} loop preload="auto" />
-
-//   return (
-//     <div className={`min-h-screen ${theme.bgColor} relative overflow-hidden`}>
-//       {/* Floating animations */}
-//       <ThemeAnimation theme={theme} />
-      
-//       {/* Music control */}
-//       <button
-//         onClick={toggleMute}
-//         className="fixed top-6 right-6 z-50 bg-white/90 backdrop-blur-sm text-2xl p-4 rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-300 border-2 border-amber-200"
-//         title={musicMuted ? 'Play Music' : 'Pause Music'}
-//       >
-//         {musicMuted ? 'X' : '🎶'}
-//       </button>
-
-//       {/* Hidden audio element */}
-//       <audio ref={audioRef} loop preload="auto">
-//         <source src="/music/romantic.mp3" type="audio/mpeg" />
-//       </audio>
-
-//       {/* Main content */}
-//       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
-        
-//         {/* Title */}
-//         <div className="text-center mb-12">
-//           <h1 
-//             onClick={() => setPage(0)}
-//             className={`text-5xl md:text-7xl font-serif font-bold ${theme.textColor} cursor-pointer hover:scale-105 transition-transform duration-300 mb-4`}
-//             style={{
-//               textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-//               fontFamily: 'Georgia, serif'
-//             }}
-//           >
-//             {title}
-//           </h1>
-//           <div className="w-32 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto opacity-60"></div>
-//         </div>
-
-//         {/* Content area */}
-//         <div className="w-full max-w-6xl mx-auto">
-//           {/* Photo and description */}
-//           {currentSlides.map((slide, slideIdx) => (
-//             <div key={slideIdx} className="text-center">
-//               {/* Photos */}
-//               <div className="flex justify-center items-center mb-8">
-//                 {(slide.images || []).map((img, imgIdx) => {
-//                   const filename = img.filename || img;
-//                   return (
-//                     <PhotoFrame
-//                       key={imgIdx}
-//                       src={`/uploads/${filename}`}
-//                       alt={`Memory ${page + 1}`}
-//                       index={imgIdx}
-//                     />
-//                   );
-//                 })}
-//               </div>
-
-//               {/* Description */}
-//               <DescriptionCard description={slide.description} theme={theme} />
-//             </div>
-//           ))}
-//         </div>
-
-//         {/* Navigation */}
-//         <div className="flex items-center justify-center mt-12 space-x-8">
-//           {/* Previous button */}
-//           {page > 0 && (
-//             <button
-//               onClick={() => setPage(page - 1)}
-//               className="group flex items-center space-x-2 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-amber-200 hover:scale-105"
-//             >
-//               <span className="text-2xl group-hover:scale-110 transition-transform">←</span>
-//               <span className="font-serif text-amber-800">Previous</span>
-//             </button>
-//           )}
-
-//           {/* Page indicator */}
-//           <div className="flex space-x-2">
-//             {[...Array(totalPages)].map((_, i) => (
-//               <button
-//                 key={i}
-//                 onClick={() => setPage(i)}
-//                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
-//                   i === page 
-//                     ? 'bg-amber-500 scale-125 shadow-lg' 
-//                     : 'bg-white/60 hover:bg-amber-300'
-//                 }`}
-//               />
-//             ))}
-//           </div>
-
-//           {/* Next button */}
-//           {page < totalPages - 1 && (
-//             <button
-//               onClick={() => setPage(page + 1)}
-//               className="group flex items-center space-x-2 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-amber-200 hover:scale-105"
-//             >
-//               <span className="font-serif text-amber-800">Next</span>
-//               <span className="text-2xl group-hover:scale-110 transition-transform">→</span>
-//             </button>
-//           )}
-//         </div>
-
-//         {/* Progress bar */}
-//         <div className="mt-8 w-64 h-2 bg-white/30 rounded-full overflow-hidden">
-//           <div 
-//             className="h-full bg-gradient-to-r from-amber-400 to-rose-400 transition-all duration-500 ease-out"
-//             style={{ width: `${((page + 1) / totalPages) * 100}%` }}
-//           />
-//         </div>
-//       </div>
-
-//       {/* Decorative elements */}
-//       <div className="fixed bottom-4 left-4 opacity-20">
-//         <div className="text-6xl">💕</div>
-//       </div>
-//       <div className="fixed top-20 left-8 opacity-20">
-//         <div className="text-4xl">✨</div>
-//       </div>
-//       <div className="fixed bottom-20 right-12 opacity-20">
-//         <div className="text-5xl">🌹</div>
-//       </div>
-//     </div>
-//   );
-// }
-
 'use client'
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState, useRef, useEffect } from 'react';
 import {themes, getThemeColors} from './themes';
+
+const useSwipe = (onSwipeLeft, onSwipeRight) => {
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > minSwipeDistance) onSwipeLeft();
+    else if (distance < -minSwipeDistance) onSwipeRight();
+  };
+
+  return {
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+  };
+};
+
 
 // Floating animation component
 const ThemeAnimation = ({ theme }) => {
@@ -905,13 +660,22 @@ export default function Story({
 }) {
   const [isFlipping, setIsFlipping] = useState(false);
   const [isBookOpen, setIsBookOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const totalSlides = journey.slides.length;
-  const contentPages = Math.ceil(totalSlides / 2);
-  const totalPages = contentPages + 2;
+  const totalPages = typeof window !== 'undefined' && window.innerWidth < 768
+    ? totalSlides + 2
+    : Math.ceil(totalSlides / 2) + 2;
 
   const title = Array.isArray(journey.title) ? journey.title[0] : journey.title;
   const colors = getThemeColors(theme);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -942,26 +706,46 @@ export default function Story({
 
   const renderCurrentPage = () => {
     if (page === 0 || page === totalPages - 1) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="w-full max-w-2xl aspect-[3/4]">
-          <BookCover
-            title={title}
-            theme={theme}
-            isClosing={page === totalPages - 1}
-          />
+      return (
+        <div className="flex items-center justify-center w-full h-full">
+          <div className="w-full max-w-2xl aspect-[3/4]">
+            <BookCover
+              title={title}
+              theme={theme}
+              isClosing={page === totalPages - 1}
+            />
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
+
+    if (isMobile) {
+      const slideIndex = page - 1;
+      const slide = journey.slides[slideIndex];
+      return (
+        <div className="flex h-full">
+          <div className="w-full">
+            {slide ? (
+              <ScrapbookPage
+                slide={slide}
+                pageNumber={slideIndex + 1}
+                isLeft={true}
+                title={title}
+                theme={theme}
+              />
+            ) : null}
+          </div>
+        </div>
+      );
+    }
 
     const contentPageIndex = page - 1;
     const leftSlideIndex = contentPageIndex * 2;
     const rightSlideIndex = leftSlideIndex + 1;
 
     return (
-      <div className="flex h-full">
-        <div className="w-1/2 border-r-2" style={{ borderColor: colors.border + '4d' }}>
+      <div className="flex flex-col md:flex-row h-full">
+        <div className="w-full md:w-1/2 border-b-2 md:border-b-0 md:border-r-2" style={{ borderColor: colors.border + '4d' }}>
           {journey.slides[leftSlideIndex] ? (
             <ScrapbookPage 
               slide={journey.slides[leftSlideIndex]} 
@@ -972,7 +756,7 @@ export default function Story({
             />
           ) : null}
         </div>
-        <div className="w-1/2">
+        <div className="w-full md:w-1/2">
           {journey.slides[rightSlideIndex] ? (
             <ScrapbookPage 
               slide={journey.slides[rightSlideIndex]}
@@ -987,14 +771,36 @@ export default function Story({
     );
   };
 
+  const swipeHandlers = useSwipe(
+    () => handlePageTurn('next'),
+    () => handlePageTurn('prev')
+  );
+
   return (
-    <div 
-      className="min-h-screen w-full relative overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary}, ${colors.accent})`
-      }}
-    >
-      <ThemeAnimation theme={theme} />
+    <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 md:px-8" {...swipeHandlers}>
+      <div className="relative w-full max-w-[1400px] md:aspect-[16/10] h-[90vh] md:h-auto mx-auto">
+        {isBookOpen && (
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-12 transform -translate-x-1/2 z-30" style={{ background: colors.bindingGradient }}>
+            {[...Array(7)].map((_, i) => (
+              <div key={i} className="absolute w-3 h-3 rounded-full left-1/2 transform -translate-x-1/2 border"
+                style={{ top: `${15 + i * 12}%`, backgroundColor: colors.text, borderColor: colors.textSecondary }} />
+            ))}
+          </div>
+        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={page}
+            initial={{ rotateY: isFlipping ? -90 : 0 }}
+            animate={{ rotateY: 0 }}
+            exit={{ rotateY: 90 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="h-full"
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            {renderCurrentPage()}
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       <button
         onClick={toggleMute}
@@ -1009,44 +815,11 @@ export default function Story({
         {musicMuted ? '🔇' : '🎶'}
       </button>
 
-      <audio ref={audioRef} loop preload="auto">
-        <source src="/music/romantic.mp3" type="audio/mpeg" />
-      </audio>
-
-      <div className="min-h-screen w-full flex items-center justify-center px-4 py-8 md:px-8">
-        <div className="relative w-full max-w-[1400px] aspect-[16/10] mx-auto">
-          {isBookOpen && (
-            <div className="absolute left-1/2 top-0 bottom-0 w-12 transform -translate-x-1/2 z-30" style={{ background: colors.bindingGradient }}>
-              {[...Array(7)].map((_, i) => (
-                <div key={i} className="absolute w-3 h-3 rounded-full left-1/2 transform -translate-x-1/2 border"
-                  style={{ top: `${15 + i * 12}%`, backgroundColor: colors.text, borderColor: colors.textSecondary }} />
-              ))}
-            </div>
-          )}
-
-          <div className="relative overflow-hidden w-full h-full">
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={page}
-                initial={{ rotateY: isFlipping ? -90 : 0 }}
-                animate={{ rotateY: 0 }}
-                exit={{ rotateY: 90 }}
-                transition={{ duration: 0.6, ease: "easeInOut" }}
-                className="h-full"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                {renderCurrentPage()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-
       {page > 0 && (
         <button
           onClick={() => handlePageTurn('prev')}
           disabled={isFlipping}
-          className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full"
+          className="fixed left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-40 text-2xl md:text-4xl p-3 md:p-6 rounded-full"
           style={{ background: colors.accent }}
         >←</button>
       )}
@@ -1055,10 +828,14 @@ export default function Story({
         <button
           onClick={() => handlePageTurn('next')}
           disabled={isFlipping}
-          className="fixed right-4 top-1/2 transform -translate-y-1/2 z-40 text-4xl p-6 rounded-full"
+          className="fixed right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-40 text-2xl md:text-4xl p-3 md:p-6 rounded-full"
           style={{ background: colors.accent }}
         >→</button>
       )}
+
+      <audio ref={audioRef} loop preload="auto">
+        <source src="/music/romantic.mp3" type="audio/mpeg" />
+      </audio>
     </div>
   );
 }

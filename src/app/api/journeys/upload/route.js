@@ -2,7 +2,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from 'next/server';
-import {enhanceDescription} from "././enhancer";
+import { enhanceDescription } from '../enhancer';
 
 
 // MAIN API HANDLER

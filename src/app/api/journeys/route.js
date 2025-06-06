@@ -6,6 +6,9 @@ import {enhanceDescription} from "./enhancer"
 
 
 // MAIN API HANDLER
+function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 export async function POST(req) {
   console.log("🚀 API Handler started");
   
@@ -42,6 +45,11 @@ export async function POST(req) {
     const slides = [];
     let context = "";
     for (let i = 0; i < imageFiles.length; i++) {
+
+      if (i%10==0){
+        await sleep(60000);
+      }
+
       console.log(`\n🔄 Processing slide ${i}...`);
       
       const file = imageFiles[i];

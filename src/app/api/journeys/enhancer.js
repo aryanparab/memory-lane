@@ -12,8 +12,7 @@ export async function enhanceDescription(text, theme,context) {
   }
 
   const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-  const prompt = `
-  Improve this description in an emotional, nostalgic and ${theme} style: "${text}". Provide only one enhanced version under 30 words.`;
+  const prompt = `It's my parent'anniversary.Improve this description in an emotional, nostalgic and don't use very complex sentences and ${theme} style: "${text}". Provide only one enhanced version under 30 words.`;
   
   console.log("🤖 Sending prompt to Gemini:", prompt);
 

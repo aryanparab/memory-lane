@@ -49,6 +49,8 @@ export default function JourneyViewer() {
     fetchJourney();
   }, [id]);
 
+
+
   useEffect(() => {
     if (journey && audioRef.current) {
       const audio = audioRef.current;

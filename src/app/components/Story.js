@@ -408,8 +408,10 @@ const ScrapbookPage = ({ slide, pageNumber, isLeft = true, title, theme }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const colors = getThemeColors(theme);
+  const baseURL = `https://memory-lane12233.s3.us-east-2.amazonaws.com`
 
   const photo = slide.images?.[0];
+    console.log(baseURL+photo.filename)
   const description = Array.isArray(slide.description) ? slide.description[0] : slide.description;
 
   return (
@@ -537,7 +539,7 @@ const ScrapbookPage = ({ slide, pageNumber, isLeft = true, title, theme }) => {
                       </div>
                     )}
                     <img
-                      src={`/uploads/${photo.filename || photo}`}
+                      src={`${baseURL}/${photo.filename || photo}`}
                       alt={`Memory ${pageNumber}`}
                       className={`w-full h-full object-cover transition-opacity duration-500 ${
                         imageLoaded ? 'opacity-100' : 'opacity-0'

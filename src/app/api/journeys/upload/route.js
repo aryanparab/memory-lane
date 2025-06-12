@@ -3,18 +3,22 @@ import { join, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { NextResponse } from 'next/server';
 import {enhanceDescription} from "../enhancer"
+import { authOptions } from '../../auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
+import clientPromise from '@/lib/mongodb';
 
 
 // MAIN API HANDLER
 export async function POST(req) {
   console.log("🚀 API Handler started");
-  
+  const session = await getServerSession(authOptions);
+  if(!session) return new Response("Unauthorized",{"status":401});
   const uploadDir = join(process.cwd(), 'public/uploads');
   const journeyDir = join(process.cwd(), 'public/journeys');
 
   try {
-    await mkdir(uploadDir, { recursive: true });
-    await mkdir(journeyDir, { recursive: true });
+    // await mkdir(uploadDir, { recursive: true });
+    // await mkdir(journeyDir, { recursive: true });
 
     console.log("📝 Parsing FormData...");
     
@@ -107,6 +111,7 @@ export async function POST(req) {
     const journeyId = uuidv4();
     const journeyData = {
       id: journeyId,
+      userId: session.user.email,
       title,
       theme,
       slides,
@@ -114,10 +119,14 @@ export async function POST(req) {
 
     console.log('💾 Final journey data before saving:', JSON.stringify(journeyData, null, 2));
 
-    const jsonPath = join(journeyDir, `${journeyId}.json`);
-    await writeFile(jsonPath, JSON.stringify(journeyData, null, 2));
+    // const jsonPath = join(journeyDir, `${journeyId}.json`);
+    // await writeFile(jsonPath, JSON.stringify(journeyData, null, 2));
     
-    console.log(`✅ Journey saved to: ${jsonPath}`);
+    // console.log(`✅ Journey saved to: ${jsonPath}`);
+    const client = await clientPromise;
+    const db = client.db('memorylane');
+    await db.collection('journeys').insertOne(journey);
+    
 
     return NextResponse.json({ success: true, id: journeyId });
     

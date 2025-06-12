@@ -1,17 +1,15 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import clientPromise from '../../../../lib/mongodb';
 import { NextResponse } from 'next/server';
 
 export async function GET(request,context) {
   const { id } = await context.params;
-  const filePath = path.join(process.cwd(),'public' ,'journeys', `${id}.json`);
-  
-  try {
-    const fileContents = await fs.readFile(filePath, 'utf-8');
-    const journey = JSON.parse(fileContents);
+  const client = await clientPromise;
+  const db = client.db('memorylane');
+
+  const journey = await db
+    .collection('journeys')
+    .findOne({ id:id });
+    if (!journey) return new Response("Not Found", { status: 404 });
+
     return NextResponse.json(journey);
-  } catch (error) {
-    console.error('Error reading journey:', error);
-    return NextResponse.json({ error: 'Journey not found' }, { status: 404 });
-  }
-}
+  } 

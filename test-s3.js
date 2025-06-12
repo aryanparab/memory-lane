@@ -7,13 +7,13 @@ console.log(Object.keys(process.env).slice(0, 3)); // check if anything loaded
 
 console.log("🔍 Env vars:");
 console.log({
-  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY,
+  AWS_ACCESS_KEY_ID_ID_ID_ID_ID_ID: process.env.AWS_ACCESS_KEY_ID_ID_ID_ID_ID,
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   AWS_REGION: process.env.AWS_REGION,
   AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
 });
 
-if (!process.env.AWS_ACCESS_KEY) {
+if (!process.env.AWS_ACCESS_KEY_ID_ID_ID_ID_ID) {
   console.error("❌ .env not loaded — check .env file location/format");
   process.exit(1);
 }
@@ -21,7 +21,7 @@ if (!process.env.AWS_ACCESS_KEY) {
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY.trim(),
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID_ID_ID_ID_ID.trim(),
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY.trim(),
   },
 });

@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 import {enhanceDescription} from "../enhancer"
 import { authOptions } from '../../auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import clientPromise from '@/lib/mongodb';
+import clientPromise from "../../../../lib/mongodb"
 
 
 // MAIN API HANDLER

@@ -1,6 +1,6 @@
 
-## Deploy link - (https://memory-lane-sx9m.vercel.app/)
-# Demo Link - https://drive.google.com/file/d/1CnsY85-dpIEjrHtMpe-qszlfVzPsM3Tn/view?usp=sharing
+## Deploy link - (https://memory-lane-sx9m.vercel.app/) 
+## Demo Link - https://drive.google.com/file/d/1CnsY85-dpIEjrHtMpe-qszlfVzPsM3Tn/view?usp=sharing
 
 # 📖 Memory Lane AI – Personalized Memory Book Generator
 
